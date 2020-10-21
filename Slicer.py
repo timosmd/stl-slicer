@@ -11,6 +11,10 @@ import slice
 import path
 from drawlines import draw_lines
 
+#Timos Klassen
+import plotPath
+
+
 '''
 Program designed to open and view ASCII STL files and then slice them for 3D printing operations. Supports variable 
 slice heights and spacing between infill grid lines. Geometry moved to fit within a 8x8x6 inch print bed as large as
@@ -33,6 +37,7 @@ class DrawObject:
         # Initiate new Loader class and run load_stl with the selected file
         self.model = Loader()
         self.model.load_stl(window.filename)
+        self.path3d = plotPath.PlotPath()
 
     # Function to plot the initial object after loading
     def plot(self, loc):
@@ -57,7 +62,10 @@ class DrawObject:
             # Plot grey lines only if grey lines are selected and the line is not already plotted black
             elif plot_geometry[point, 2] == 0 and view.get() == 'grey' and self.pxarray[x][y] != 0:
                 self.pxarray[x][y] = (210, 210, 210)  # Color = grey
+
+
         # Plot pixel array to screen and refresh window/GUI
+        # TODO: Hier Fehler wenn build-dimensions veraendert werden
         pygame.surfarray.blit_array(loc, self.pxarray)
         pygame.display.flip()
         window.update()
@@ -130,6 +138,9 @@ class DrawObject:
                             'The slicer has completed slicing the model successfully! \n\n'
                             'Check the created "outputs" folder for an SVG file of each slice of the model and'
                             ' the "path.csv" file for the print head coordinate instructions')
+
+        # Create 3D plot of toolpath (x,y,z) based on csv-Output
+        self.path3d.readCSV()
 
 
 # STL file loader class
@@ -472,13 +483,20 @@ image.place(x=975, rely=0.825, anchor="c")
 
 view = StringVar()
 view.set('wire')
+
 # Default dimensions of the print bed in mm
 xdim = DoubleVar()
 xdim.set(8*25.4)
+#xdim.set(250.)
+
 ydim = DoubleVar()
 ydim.set(6*25.4)
+#ydim.set(250.)
+
 zdim = DoubleVar()
 zdim.set(8*25.4)
+#zdim.set(250.)
+
 # Default slice step size in mm
 slice_size = DoubleVar()
 slice_size.set(0.5*25.4)

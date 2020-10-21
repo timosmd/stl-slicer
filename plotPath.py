@@ -14,35 +14,68 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import axes3d
 
 
-def readCSV(filename):
+class PlotPath:
+
+
+
+    def __init__(self):
+
+        self.csvFileName = 'D:\Eigene Dateien\Arbeit\Python-Slicer\outputs\path.csv'
+
+    def readCSV(self):
     
-    csvData = []
-    with open(filename, 'r') as csvFile:
-        csvReader = csv.reader(csvFile, delimiter=' ')
-        for csvRow in csvReader:
-            csvData.append(csvRow)
+        #Create empty lists
+        csvData = []
+        X_off = []
+        Y_off = []
+        Z_off = []
+        X_on = []
+        Y_on = []
+        Z_on = []
+
+
+        with open(self.csvFileName, 'r') as csvFile:
+            csvReader = csv.reader(csvFile, delimiter=' ')
+            for csvRow in csvReader:
+                csvData.append(csvRow)
     
-    # Get X, Y, Z
-    csvData = np.array(csvData)
-    csvData = csvData.astype(np.float)
-    X, Y, Z = csvData[:,1], csvData[:,2], csvData[:,3]
+        # Get X, Y, Z
+        csvData = np.array(csvData)
+        csvData = csvData.astype(np.float)
+
+
+        #for idx in range(len(csvData)):
+
+        #    #Check if Extruder is off (0) or on (1)
+        #    if csvData[idx,4] == 0.0:  
+        #        X_off.append(csvData[idx,1])
+        #        Y_off.append(csvData[idx,2])
+        #        Z_off.append(csvData[idx,3])
+        #    elif csvData[idx,4] == 1.0:
+        #        X_on.append(csvData[idx,1])
+        #        Y_on.append(csvData[idx,2])
+        #        Z_on.append(csvData[idx,3])
+        #    else:
+        #        print("Fehler in CSV-Datei: Extruder weder an noch aus.")
+
+
+        X, Y, Z = csvData[:,1], csvData[:,2], csvData[:,3]
     
-    # Plot X,Y,Z
-    fig = plt.figure()
-    ax = fig.add_subplot(111, projection='3d')
-    ax.plot_trisurf(X, Y, Z, color='white', edgecolors='grey', alpha=0.5)
-    ax.scatter(X, Y, Z, c='red')
-    plt.show()
+        # Plot X,Y,Z
+        fig = plt.figure()
+        ax = fig.add_subplot(111, projection='3d')
 
-    print("plotting finished.")
+        ax.plot(X,Y,Z, c='red', alpha=1)
 
-def main():
-	
-    csvFileName = 'D:/Eigene Dateien/Arbeit/Python-Slicer/stl-slicer/outputs/path.csv'
-    readCSV(csvFileName)
+        ##Plot points where extruder on (red) and off (blue)
+        #ax.scatter(X_on, Y_on, Z_on, c='red', alpha=1)
+        #ax.scatter(X_off, Y_off, Z_off, c='blue', alpha = 1)
+    
+        plt.show()
 
+        print("plotting finished.")
 
-if __name__ == '__main__':
-	main()
+        return 1;
+
 
 

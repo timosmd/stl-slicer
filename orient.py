@@ -16,6 +16,7 @@ def to_origin(geometry):
     # Compute object dimensions and distance from the origin
     max_size = np.max(geometry, axis=0)  # Max X,Y,Z values of the object
     min_size = np.min(geometry, axis=0)  # Min X,Y,Z values of the object
+    print("xmax = %s | xmin = %s" % (max_size[0], min_size[0]))
     x_trans = 0 - 0.5*(max_size[0]+min_size[0])  # Avg X distance from the origin (center of the object)
     y_trans = 0 - 0.5*(max_size[1]+min_size[1])  # Avg Y distance from the origin (center of the object)
     z_trans = 0 - 0.5*(max_size[2]+min_size[2])  # Avg Z distance from the origin (center of the object)
@@ -31,6 +32,7 @@ def fit_bed(geometry, xdim, ydim, zdim):
 
     # Compute object scaling based on the minimum ratio between the print bed dimensions and the object size
     scale = min(xdim/max_size[0], ydim/max_size[1], zdim/max_size[2])
+    print(scale)
     geometry = gtransform.scale(geometry, 1 / scale)  # Apply global scaling with appropriate factor
 
     return geometry

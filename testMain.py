@@ -10,8 +10,8 @@ import plotPath
 
 def main():
 	
-	plot = plotPath.ShowPath(self)
-    plot.readCSV(self)
+	plot3 = plotPath.PlotPath()
+	plot3.readCSV()
 
 if __name__ == '__main__':
 	main()
